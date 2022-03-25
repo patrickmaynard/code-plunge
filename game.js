@@ -3,9 +3,11 @@ $(document).ready(function(){
 
         init: function () {
             that = this;
-            that.delay = 5; //How many miliseconds between pixel moves
+            that.delay = 25; //How many miliseconds between pixel moves
             that.blockHeight = 18;
             that.bottomPieceTop = $($('#board')[0]).height() - that.blockHeight;
+            that.questions = {};
+            that.initQuestions();
             $('#board')[0].innerHTML = '';
             that.fallRandomBlock();
             $('#code').keyup(that.trySolution);
@@ -16,6 +18,7 @@ $(document).ready(function(){
             that.setInitialBlockPosition(blockId);
             const block = $($('#block_'+blockId));
             that.setStopPoint(block);
+            that.attachQuestion(block);
             block.intervalId = window.setInterval(that.considerMovingBlockDownOnePixel, that.delay, block);
         },
 
@@ -87,7 +90,35 @@ $(document).ready(function(){
 
         trySolution: function() {
             alert('Trying solution!');
-        }
+        },
+
+        attachQuestion: function(block) {
+            alert('Stub for attaching questions!');
+        },
+
+        initQuestions: function() {
+            that.questions[0] = {
+                'function' : 'count',
+                'faller' : '$oranges = 15',
+                'instructions' : 'Get the number 15 with count()',
+                'expected' : 15
+            };
+            that.questions[1] = {
+                'function' : 'count',
+                'faller' : '$dogs = 250',
+                'instructions' : 'Get the number 250 with count()',
+                'expected' : 250
+            };
+            that.questions[1] = {
+                'function' : 'count',
+                'faller' : '$fruits = ["apple","pear"]',
+                'instructions' : 'Get the number 2 with count()',
+                'expected' : 2
+            };
+        },
+
     };
+
     game.init();
+
 });
