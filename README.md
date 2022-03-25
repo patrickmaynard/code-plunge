@@ -7,15 +7,15 @@ It is based on Tetris. To play the game, visit http://patrickmaynard.github.io/c
 Apologies for the terrible JavaScript and HTML. I am not a frontend developer these days, so I'm hoping to eventually get some help refactoring.
 
 ## TODO items:
- 
-* Create a vanilla js file called game.js that will (for now) hold all the logic for the game
-* Create a "(re)start game" button at the bottom
-* Create logic for falling strings that the code needs to manipulate
-* Create logic for losing the game
+
+* Add a score area at the bottom
+* Create logic for generating the numbers/strings you'll use as operands in the drills
 * Create a listener on the input field that listens for the "return" or "enter" key and runs a count() via http://asmblah.github.io/uniter/
 * Add a few more functions from https://www.exakat.io/en/top-100-php-functions/
+* Add a pause click listener that slaps a modal up on the screen
 * Get help from someone on refactoring the frontend code
-* Add an intro screen that allows the user to select a langauge (just PHP for now)
 * Get help from some devs in other languages on adding support for additional languages
+* Create a "(re)start game" button at the bottom
 * Move this to your personal server so you can hook it up to a database for logins, recording of high scores, etc.,.
 * Now that the code is no longer being served directly from GitHub, exclude the NPM package folder from version control
+* Fix bug that causes occasional overlap of blocks
