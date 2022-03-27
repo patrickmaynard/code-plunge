@@ -8,12 +8,12 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 
 ## TODO items:
 
-* Create a listener on the input field that listens for the "return" or "enter" key and runs a count() via http://asmblah.github.io/uniter/
 * Set up scoring if not already done
-* Add a few more functions from https://www.exakat.io/en/top-100-php-functions/
 * Add a pause click listener that slaps a modal up on the screen
 * Clean up CSS a bit
+* Make the game start with one function and add more as you get better
 * Make the game speed up as you get better
+* Add a few more functions from https://www.exakat.io/en/top-100-php-functions/
 * Add checkboxes on the pause screen for choosing which functions to practice. Unless a checkbox has been manually checked, the functions should be gradually added automatically
 * Add more functions -- try to get up to the top 20!
 * Get help from someone on refactoring the frontend code
