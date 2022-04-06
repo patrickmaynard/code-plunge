@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Welcome to Code Plunge</title>
+    <title>Code Plunge</title>
     <style>
         * {padding:0px; margin:0px; text-align:center;}
         div {border:1px solid gray; margin:auto;}
         #board {width: 800px; height: 65vh;}
         #instructions {width: 800px; height: 15vh;}
         #code {width:800px; height: 8vh;}
-        div.falling-block {color:black; background:gray; width:200px;}
+        div.falling-block {color:black; background:gray; width:200px; z-index:100;}
         div#score {width: 800px; height:4vh;}
+        div#options {z-index: 1001; background: white;}
+        div#options-container {height:0px; border:0px none; overflow: visible; z-index:1000;}
+        div.hidden-options {display:none;}
     </style>
     <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.js"></script>
     <script src="https://unpkg.com/uniter@2.17.0/dist/uniter.js"></script>
@@ -17,6 +20,14 @@
 </head>
 <body>
 <main>
+    <div id="options-container">
+        <div id="options" class="hidden-options">
+            <h2>Game paused. Click board again to unpause.</h2>
+            <input type="range" id="speed" name="speed"
+                   min="0" max="100">
+            <label for="speed">Speed</label>
+        </div>
+    </div>
     <div id="board"></div>
     <div id="instructions">Instructions will appear here.</div>
     <input id="code" placeholder="Type here and hit Enter when done."></div>
