@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>Code Plunge</title>
+    <link rel="stylesheet" href="http://berlin.patrickmaynard.com/css/normalize.css" />
     <style>
         * {padding:0px; margin:0px; text-align:center;}
         div {border:1px solid gray; margin:auto;}
@@ -10,7 +11,7 @@
         #code {width:800px; height: 8vh;}
         div.falling-block {color:black; background:gray; width:200px; z-index:100;}
         div#score {width: 800px; height:4vh;}
-        div#options {z-index: 1001; background: white;}
+        div#options {z-index: 1001; background: white; min-height:150px;}
         div#options-container {height:0px; border:0px none; overflow: visible; z-index:1000;}
         div.hidden-options {display:none;}
     </style>
@@ -23,9 +24,18 @@
     <div id="options-container">
         <div id="options" class="hidden-options">
             <h2>Game paused. Click board again to unpause.</h2>
+            <label for="speed">Speed</label>
             <input type="range" id="speed" name="speed"
                    min="0" max="100">
-            <label for="speed">Speed</label>
+            <br>
+            <input type="checkbox" name="auto-add-functions" id="auto-add-functions" checked="checked"><label for="auto-add-functions">Automatically add new functions during level-ups.</label>
+            <div id="available-functions">
+                <input type="checkbox" name="count" id="count" checked="checked"><label for="count">count()</label>
+                <input type="checkbox" name="is_array" id="is_array"><label for="is_array">is_array()</label>
+                <input type="checkbox" name="substr" id="substr"><label for="substr">substr()</label>
+                <input type="checkbox" name="in_array" id="in_array"><label for="in_array">in_array()</label>
+                <input type="checkbox" name="explode" id="explode"><label for="explode">explode()</label>
+            </div>
         </div>
     </div>
     <div id="board"></div>
