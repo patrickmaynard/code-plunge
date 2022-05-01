@@ -3,7 +3,7 @@ $(document).ready(function(){
 
         init: function () {
             that = this;
-            that.delay = that.delay !== undefined ? that.delay : 100; //How many milliseconds between pixel moves
+            that.delay = 100; //How many milliseconds between pixel moves
             that.questions = [];
             that.showCorrectAlerts = true;
             that.level = 1;
@@ -15,7 +15,7 @@ $(document).ready(function(){
             that.scoreBox = $($('#score')[0]);
             that.scoreBox.html(0);
             that.keyCodeForEnterKey = 13;
-            that.totalLevels = 5;
+            that.totalLevels = $('#available-functions input').length;
             that.setupQuestions();
             that.board = that.setupBoard();
             that.fallRandomBlock();
@@ -154,7 +154,7 @@ $(document).ready(function(){
                     //The block has reached the bottom (or is resting on another block).
                     //Decrement the score by a small amount and fall another block.
                     that.scoreBox.html(parseInt(that.scoreBox.html()) - that.pointsLostWhenBlockReachesBottom);
-                    that.clearListenerAndFallNextBlock()
+                    that.clearListenerAndFallNextBlock();
                 }
             }
         },
@@ -259,7 +259,8 @@ $(document).ready(function(){
             console.log('We have just leveled up. New level:');
             console.log(that.level);
             if (that.level > that.totalLevels) {
-                alert('You have beaten the game!');
+                alert('Congratulations! You have beaten the game! Restarting ...');
+                that.init();
             }
             const functionName = that.questions[that.numberOfEachFunction * (that.level - 1)]['function'];
             if ($('#auto-add-functions').is(':checked')) {
