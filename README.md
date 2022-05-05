@@ -12,16 +12,17 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 
 ## TODO items:
 
-* Add 3 more PHP functions, bringing total function count to 8
+* Add 2 more PHP functions, bringing total function count to 8
 * Make scrollable the area of checkboxes for functions in pause modal
 * Use jQuery UI or some other resource for the pause modal, which is pretty bad now
 * Lock the gameplay area to a specific pixel size so scores are competitive
 * Clean up CSS a bit
-* Add 4 more functions from https://www.exakat.io/en/top-100-php-functions/ for an even dozen
+* Add 2 more functions from https://www.exakat.io/en/top-100-php-functions/ for the top 10
 * Add a collapsible area that shows the previous answer
 * Add more functions -- try to get up to the top 20!
 * Get help from someone on refactoring the frontend code
 * Get help on seeing if there's a better transpiler to use, since the current one seems to use an old version of PHP
+* Fix the bug in which people can just type a literal or boolean to "answer" the question
 * As preparation for the move from github.io to your personal server (where you'll need to pay for infrastructure), modify the pause screen to show a simple ad
 * Create a "(re)start game" button at the bottom
 * Move this to your personal server so you can hook it up to a database for logins, recording of high scores, times, etc.,.

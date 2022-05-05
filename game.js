@@ -19,6 +19,7 @@ $(document).ready(function(){
             that.setupQuestions();
             that.board = that.setupBoard();
             that.fallRandomBlock();
+            that.newLevelFlag = false;
         },
 
         setupBoard: function() {
@@ -28,6 +29,7 @@ $(document).ready(function(){
             board.click(function(){
                 that.togglePause(board);
             });
+            $('#count').prop("checked", false);
             $('#count')[0].checked = 'checked';
 
             return board;
@@ -200,9 +202,15 @@ $(document).ready(function(){
         },
 
         getBlockQuestion: function() {
-            const randomizedQuestionNumber = Math.floor(Math.random() * (that.questions.length));
-            if ($('#'+that.questions[randomizedQuestionNumber]['function']).is(':checked')){
-                return that.questions[randomizedQuestionNumber];
+            if (!that.newLevelFlag) {
+                var questionNumber = Math.floor(Math.random() * (that.questions.length));
+            } else {
+                //This is a new level.
+                var questionNumber = that.level * that.numberOfEachFunction - 1;
+                that.newLevelFlag = false;
+            }
+            if ($('#'+that.questions[questionNumber]['function']).is(':checked')){
+                return that.questions[questionNumber];
             } else {
                 return that.getBlockQuestion();
             }
@@ -247,7 +255,7 @@ $(document).ready(function(){
             if (expected === result) {
                 that.scoreBox.html(parseInt(that.scoreBox.html()) + that.pointsPerCorrectAnswer);
                 block.remove();
-                if (parseInt(that.scoreBox.html()) % that.pointsForLevelUp === 0) {
+                if (parseInt(that.scoreBox.html()) >= that.pointsForLevelUp * that.level) {
                     that.levelUp();
                 }
                 that.clearListenerAndFallNextBlock();
@@ -256,6 +264,7 @@ $(document).ready(function(){
 
         levelUp: function() {
             that.level ++;
+            that.newLevelFlag = true;
             console.log('We have just leveled up. New level:');
             console.log(that.level);
             if (that.level > that.totalLevels) {
@@ -320,7 +329,7 @@ $(document).ready(function(){
             that.questions.push({
                 'function' : 'is_array',
                 'faller' : "$states = (object) ['name' => 'California']; \n$countries = ['name' => 'USA'];",
-                'instructions' : 'usng is_array()',
+                'instructions' : 'using is_array()',
                 'castTo' : 'bool',
                 'logic' : 'is_array($states);',
                 'page' : 'https://www.php.net/manual/en/function.is-array.php'
@@ -428,6 +437,38 @@ $(document).ready(function(){
                 'castTo' : 'string',
                 'logic' : 'explode(" ", $towns)[2];',
                 'page' : 'https://www.php.net/explode'
+            });
+            that.questions.push({
+                'function' : 'str_replace',
+                'faller' : '$text = "My Laptop Is Full Of Ham";',
+                'instructions' : 'using str_replace()',
+                'castTo' : 'string',
+                'logic' : 'str_replace("Ham", "Jelly", $text);',
+                'page' : 'https://www.php.net/str_replace'
+            });
+            that.questions.push({
+                'function' : 'str_replace',
+                'faller' : '$text = "Mustard and Toast";',
+                'instructions' : 'using str_replace()',
+                'castTo' : 'string',
+                'logic' : 'str_replace("st", "v", $text);',
+                'page' : 'https://www.php.net/str_replace'
+            });
+            that.questions.push({
+                'function' : 'str_replace',
+                'faller' : '$text = "And That\'s What I Learned In School Today";',
+                'instructions' : 'using str_replace()',
+                'castTo' : 'string',
+                'logic' : 'str_replace("Learned", "Broke", $text);',
+                'page' : 'https://www.php.net/str_replace'
+            });
+            that.questions.push({
+                'function' : 'str_replace',
+                'faller' : '$text = "Well That Is Just Not Very Nice";',
+                'instructions' : 'using str_replace()',
+                'castTo' : 'string',
+                'logic' : 'str_replace("That", "Timmy", $text);',
+                'page' : 'https://www.php.net/str_replace'
             });
 
         },
