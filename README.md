@@ -19,6 +19,7 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 * Clean up CSS a bit
 * Add 2 more functions from https://www.exakat.io/en/top-100-php-functions/ for the top 10
 * Add a collapsible area that shows the previous answer
+* Move question retrieval to dexie, as part of a preparation for an eventual move to MySQL
 * Add more functions -- try to get up to the top 20!
 * Get help from someone on refactoring the frontend code
 * Get help on seeing if there's a better transpiler to use, since the current one seems to use an old version of PHP
