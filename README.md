@@ -35,4 +35,5 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 * Add 5 more functions to get up to the top 25 PHP functions
 * Add Python equivalents of the PHP functions you currently have
 * Gradually add more PHP functions in groups of 5 until you have all of the top 100
+* Consider integrating some of this material as well: https://www.exakat.io/en/top-100-php-classes-that-you-should-know/
 * Get help from some devs in other languages on adding support for those languages
