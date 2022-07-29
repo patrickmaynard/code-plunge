@@ -22,7 +22,7 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 * Move question retrieval to dexie, as part of a preparation for an eventual move to MySQL
 * Add more functions -- try to get up to the top 20!
 * Get help from someone on refactoring the frontend code
-* Get help on seeing if there's a better transpiler to use, since the current one seems to use an old version of PHP
+* Get help on seeing if there's a better transpiler to use, since the current one seems to use an old version of PHP. One possible option: https://github.com/seanmorris/php-wasm
 * Fix the bug in which people can just type a literal or boolean to "answer" the question
 * As preparation for the move from github.io to your personal server (where you'll need to pay for infrastructure), modify the pause screen to show a simple ad
 * Create a "(re)start game" button at the bottom
