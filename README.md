@@ -37,3 +37,6 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 * Gradually add more PHP functions in groups of 5 until you have all of the top 100
 * Consider integrating some of this material as well: https://www.exakat.io/en/top-100-php-classes-that-you-should-know/
 * Get help from some devs in other languages on adding support for those languages
+* Add any remaining multibyte string functions - https://www.php.net/manual/en/ref.mbstring.php
+* Add any remaining string functions that don't have multibyte equivalents - https://www.php.net/manual/en/ref.strings.php
+* Add any remaining array functions - https://www.php.net/manual/en/book.array.php
