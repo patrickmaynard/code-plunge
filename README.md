@@ -26,12 +26,12 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 * Fix the bug in which people can just type a literal or boolean to "answer" the question
 * As preparation for the move from github.io to your personal server (where you'll need to pay for infrastructure), modify the pause screen to show a simple ad
 * Create a "(re)start game" button at the bottom
-* Move this to your personal server so you can hook it up to a database for logins, recording of high scores, times, etc.,.
+* Move this to your personal server --so you can hook it up to a database for logins, recording of high scores, times, etc.,.-- actually, as having a reliable score that couldn't be fiddled with in the frontend would involve running `eval()` on user-supplied code the server side (which is obviously very unsafe), we'll do away with storing high scores. But we can still maybe serve this from somewhere to de-bloat the github repo. (See below)
 * Now that the code is no longer being served directly from GitHub, exclude the NPM package folder from version control
 * Fix bug that causes blocks to occasionally fall through other blocks
 * Add logic that allows the player to see how much time they won the game in
 * Fix bug that causes falling blocks to push the pause modal into the background
-* Add a method for generating a screenshot and posting it to social media along with a score
+* Add a method for generating a screenshot and posting it to social media along with a score (again, acknowledging somewhere that the scores might be hacked on the frontend) 
 * Add 5 more functions to get up to the top 25 PHP functions
 * Add Python equivalents of the PHP functions you currently have
 * Gradually add more PHP functions in groups of 5 until you have all of the top 100
