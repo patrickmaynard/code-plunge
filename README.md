@@ -1,6 +1,6 @@
 # Code plunge
 
-This is a game for practicing the use of the most common PHP functions. (More languages coming soon.)
+This is a PARTIALLY COMPLETE game for practicing the use of the most common PHP functions. (More languages coming soon ... ish.)
 
 It is based loosely on Tetris. To play the game, visit http://patrickmaynard.github.io/code-plunge 
 
