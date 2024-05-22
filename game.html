@@ -11,9 +11,42 @@
         #code {width:800px; height: 8vh;}
         div.falling-block {color:black; background:gray; width:200px; z-index:100;}
         div#score {width: 800px; height:4vh;}
-        div#options {z-index: 1001; background: white; min-height:150px;}
-        div#options-container {height:0px; border:0px none; overflow: visible; z-index:1000;}
-        div.hidden-options {display:none;}
+        div#options {
+          z-index: 1001;
+          background: white;
+          min-height:150px;
+          width:650px;
+          position:relative;
+          top:40px;
+          padding:20px;
+        }
+        div#options-container {
+          height:0px;
+          border:0px none;
+          overflow: visible;
+          z-index:1000;
+        }
+        div.hidden-options {
+          display:none;
+        }
+        .speed-label {
+          position:relative;
+          top:-5px;
+        }
+        div#available-functions {
+          height:100px;
+          width: 220px;
+          overflow-x:scroll;
+          margin-top:20px;
+          #margin-bottom:20px;
+          border: 1px dashed #cccccc;
+        }
+        div#available-functions span {
+          white-space: nowrap;
+        }
+        div#available-functions label {
+          margin-right: 15px;
+        }
     </style>
     <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.js"></script>
     <script src="https://unpkg.com/uniter@2.17.0/dist/uniter.js"></script>
@@ -24,18 +57,38 @@
     <div id="options-container">
         <div id="options" class="hidden-options">
             <h2>Game paused. Click board again to unpause.</h2>
-            <label for="speed">Speed</label>
+            <br>
+            <label for="speed" class="speed-label">Speed</label>
             <input type="range" id="speed" name="speed"
                    min="0" max="100">
-            <br>
-            <input type="checkbox" name="auto-add-functions" id="auto-add-functions" checked="checked"><label for="auto-add-functions">Automatically add new functions during level-ups.</label>
+            <br>&nbsp;<br>
+            <input type="checkbox" name="auto-add-functions" id="auto-add-functions" checked="checked">
+            <label for="auto-add-functions">Automatically add new functions during level-ups.</label>
             <div id="available-functions">
-                <input type="checkbox" name="count" id="count" checked="checked"><label for="count">count()</label>
-                <input type="checkbox" name="is_array" id="is_array"><label for="is_array">is_array()</label>
-                <input type="checkbox" name="substr" id="substr"><label for="substr">substr()</label>
-                <input type="checkbox" name="in_array" id="in_array"><label for="in_array">in_array()</label>
-                <input type="checkbox" name="explode" id="explode"><label for="explode">explode()</label>
-                <input type="checkbox" name="str_replace" id="str_replace"><label for="str_replace">str_replace()</label>
+              <span>
+              <input type="checkbox" name="count" id="count" checked="checked">
+              <label for="count">count()</label>
+              </span>
+              <span>
+              <input type="checkbox" name="is_array" id="is_array">
+              <label for="is_array">is_array()</label>
+              </span>
+              <span>
+              <input type="checkbox" name="substr" id="substr">
+              <label for="substr">substr()</label>
+              </span>
+              <span>
+              <input type="checkbox" name="in_array" id="in_array">
+              <label for="in_array">in_array()</label>
+              </span>
+              <span>
+              <input type="checkbox" name="explode" id="explode">
+              <label for="explode">explode()</label>
+              </span>
+              <span>
+              <input type="checkbox" name="str_replace" id="str_replace">
+              <label for="str_replace">str_replace()</label>
+              </span>
             </div>
         </div>
     </div>
