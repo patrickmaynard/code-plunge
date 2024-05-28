@@ -1,3 +1,8 @@
+
+
+//No, seriously, did I mention I'm not a frontend developer?
+
+
 $(document).ready(function(){
     let game = {
 
@@ -5,6 +10,7 @@ $(document).ready(function(){
             that = this;
             that.delay = 100; //How many milliseconds between pixel moves
             that.questions = [];
+            that.db = {};
             that.showCorrectAlerts = true;
             that.level = 1;
             that.pointsPerCorrectAnswer = 10;
@@ -17,6 +23,7 @@ $(document).ready(function(){
             that.keyCodeForEnterKey = 13;
             that.totalLevels = $('#available-functions input').length;
             that.setupQuestions();
+            that.putQuestionsIntoDatabase(); //This feels redundant for now. But if we build this out, it won't be.
             that.board = that.setupBoard();
             that.fallRandomBlock();
             that.newLevelFlag = false;
@@ -470,9 +477,43 @@ $(document).ready(function(){
                 'logic' : 'str_replace("That", "Timmy", $text);',
                 'page' : 'https://www.php.net/str_replace'
             });
-
         },
 
+        putQuestionsIntoDatabase: function() {
+            var dbName = 'codePlunge';
+            that.db = new Dexie(dbName);
+            that.db.version(1).stores({
+              questions: 'id++,function,faller,instructions,castTo,logic,page'
+            });
+            that.db.open().catch(function (e) {
+              console.error("Open failed.");
+              console.log(e);
+            })
+            that.db.transaction('rw', that.db['questions'], function () {
+            $(that.questions).each(function(i,v){
+              that.db.questions.add({
+                functionName: v['function'],
+                faller: v['faller'],
+                instructions: v['instructions'],
+                castTo: v['castTo'],
+                logic: v['logic'],
+                page: v['page'],
+                language: 'php' //This can stay here for now, but it should eventually move to our language JSON files.
+              });
+
+              //Just some test stuff here. Todo: Delete this once everything works.
+              that.db.questions.where("instructions").startsWith("using explode")
+                .or("").anyOf (["Malmö", "str_replace", "count"])
+                .each(function (question) {
+                  console.log("Found question with faller: " + question.faller);
+                });
+
+            });
+            }).catch (function (e) {
+              console.error('transaction failed.');
+              console.error(e);
+            });
+        },
     };
 
     game.init();
