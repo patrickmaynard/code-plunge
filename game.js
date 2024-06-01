@@ -11,6 +11,7 @@ $(document).ready(function(){
             that.delay = 100; //How many milliseconds between pixel moves
             that.questions = [];
             that.db = {};
+            that.languageToUse = 'php'; //Can be hardcoded here for now
             that.showCorrectAlerts = true;
             that.level = 1;
             that.pointsPerCorrectAnswer = 10;
@@ -209,6 +210,21 @@ $(document).ready(function(){
         },
 
         getBlockQuestion: function() {
+           //New behavior (partially built -- the availableFunctionNames array is now being reliably populated.
+           //The next step is to do a dexie query for all applicable questions and select a random question.
+           //After that, we would want to return that random question.
+           //Finally, we want to TEST this new behavior extremely thoroughly, using both manual and automated tests.
+            availableFunctionNames = [];
+            $('#available-functions').children('span').each(function(i,v){
+              let checkbox = $(v).children('input')[0];
+              if (checkbox.checked) {
+                availableFunctionNames[i] = checkbox.id;
+              }
+            });
+          //TIWIS - Now do the query.
+
+
+          //Old behavior
             if (!that.newLevelFlag) {
                 var questionNumber = Math.floor(Math.random() * (that.questions.length));
             } else {
@@ -500,14 +516,6 @@ $(document).ready(function(){
                 page: v['page'],
                 language: 'php' //This can stay here for now, but it should eventually move to our language JSON files.
               });
-
-              //Just some test stuff here. Todo: Delete this once everything works.
-              that.db.questions.where("instructions").startsWith("using explode")
-                .or("").anyOf (["Malmö", "str_replace", "count"])
-                .each(function (question) {
-                  console.log("Found question with faller: " + question.faller);
-                });
-
             });
             }).catch (function (e) {
               console.error('transaction failed.');
