@@ -19,18 +19,23 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
   not something I am prepared to do at this time. So we'll just store personal
   scores in a cookie instead.)
 * x Do import of questions into dexie, as part of prep for a move to a DB
-* ~~ Move question retrieval to dexie (see TIWIS line), as part of a preparation
+* x Move question retrieval to dexie (see TIWIS line), as part of a preparation
   for an eventual move to using a DB
 * Clean up CSS a bit
+* Get help on seeing if there's a better transpiler to use, since the current one seems to use an old version of PHP. One possible option: https://github.com/seanmorris/php-wasm
 * Add a collapsible area that shows the previous answer. Can be shown/hidden via
   a checkbox in the pause screen, with it hidden by default to save screen real
   estate
-* Get help on seeing if there's a better transpiler to use, since the current one seems to use an old version of PHP. One possible option: https://github.com/seanmorris/php-wasm
+* Add an MIT license, along with a mention on the home screen of the idea that
+  any fees eventually paid for the game are not for the software itself, which
+  is free, but for things like early access to new questions
+* Remove any old JS functions that are no longer used
 * Add 4 more functions from https://www.exakat.io/en/top-100-php-functions/ for the top 10
 * Fix the bug in which people can just type a literal or boolean to "answer" the question
 * Add a minimal screen resolution check in the css, with screens below a certain
   size yielding a message saying something like "at this time, only desktop
-  views of at least 123px by 123px are supported"
+  views of at least 123px by 123px are supported." Make the height of the
+  playing area uniform. (The width is already uniform.)
 * As preparation for the move from github.io to your personal server (where you'll need to pay for infrastructure), modify the pause screen to show a simple ad
 * Get help from someone on refactoring the frontend code
 * Create a "(re)start game" button at the bottom
@@ -40,6 +45,8 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 * Add a method for generating a screenshot and posting it to social media along with a score (again, acknowledging somewhere that the scores might be hacked on the frontend)
 * Move question definitions to /questions/php.json and make sure the language
   attribute is now being read from that json
+* Abstract your dexie logic into a DexieJsonQuestionProvier.js file. This will
+  allow more flexibility if we ever decide to change database providers
 * Now that you've abstracted things into json, add 5 Python functions and
   recruit for other Python contributors on the NICAR list
 * Add more functions -- try to get up to the top 20 in each language!

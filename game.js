@@ -25,9 +25,6 @@ $(document).ready(function(){
             that.totalLevels = $('#available-functions input').length;
             that.setupQuestions();
             that.putQuestionsIntoDatabase(); //This feels redundant for now. But if we build this out, it won't be.
-            that.board = that.setupBoard();
-            that.fallRandomBlock();
-            that.newLevelFlag = false;
         },
 
         setupBoard: function() {
@@ -48,16 +45,12 @@ $(document).ready(function(){
             board.toggleClass('paused');
         },
 
-        fallRandomBlock: function() {
-            const block = that.createRandomBlock();
+        finishFallingRandomBlock: function(block) {
+            console.log('Getting ready to finish falling. The block:');
+            console.log(block);
             that.setInitialBlockPosition(block);
             that.setStopPoint(block);
             block.intervalId = window.setInterval(that.considerMovingBlockDownOnePixel, that.delay, block);
-
-
-            //TODO: Figure out why the instructions ALWAYS say "using count()" even when only the last function checkbox is checked.
-
-
             $('#instructions')[0].innerHTML =
                 'Get ' +
                 that.chooseCastTypeAndCastExpectedValueForDisplay(
@@ -116,6 +109,7 @@ $(document).ready(function(){
 
         setInitialBlockPosition: function(block) {
             const boardWidth = $($('#board')[0]).width();
+            console.log(block);
             block.offset(
                 {
                     top: 0,
@@ -172,7 +166,7 @@ $(document).ready(function(){
         clearListenerAndFallNextBlock: function() {
             $('#code').off();
             $('#code')[0].value = '';
-            that.fallRandomBlock();
+            that.getBlockQuestionAndCreateRandomBlock();
         },
 
         setStopPoint: function(block) {
@@ -198,22 +192,31 @@ $(document).ready(function(){
             });
         },
 
-        createRandomBlock: function() {
+        //This is new as part of my dexie refactoring.
+        //TODO: Remove this comment when the refactoring is done.
+        createBlockFromQuestionAndFinishStartingItsFall: function(allValidQuestionsAsArray) {
+            var questionNumber = Math.floor(Math.random() * (allValidQuestionsAsArray.length));
+            question = allValidQuestionsAsArray[questionNumber];
+            console.log('Starting the createBlockFromQuestionAndFinishStartingItsFall logic ...');
             const id = Math.round(Math.random() * 100000000);
             $('#board')[0].innerHTML += '<div class="falling-block" id="block_'+id+'"> ... </div>';
             const block = $($('#block_'+id)[0]);
-            block.question = that.getBlockQuestion();
             console.log(block);
-            console.log(block.question);
+            block.question = question;
+            console.log('The question:');
+            console.log(question);
             block.html(block.question.faller);
-            return(block);
+            console.log('Almost finished with createBlockFromQuestionAndFinishStartingItsFall logic ...');
+            that.finishFallingRandomBlock(block);
+            console.log('Finished with createBlockFromQuestionAndFinishStartingItsFall logic.');
         },
 
-        getBlockQuestion: function() {
+        getBlockQuestionAndCreateRandomBlock: function() {
            //New behavior (partially built -- the availableFunctionNames array is now being reliably populated.
            //The next step is to do a dexie query for all applicable questions and select a random question.
            //After that, we would want to return that random question.
            //Finally, we want to TEST this new behavior extremely thoroughly, using both manual and automated tests.
+
             availableFunctionNames = [];
             $('#available-functions').children('span').each(function(i,v){
               let checkbox = $(v).children('input')[0];
@@ -221,21 +224,43 @@ $(document).ready(function(){
                 availableFunctionNames[i] = checkbox.id;
               }
             });
-          //TIWIS - Now do the query.
-
-
-          //Old behavior
-            if (!that.newLevelFlag) {
-                var questionNumber = Math.floor(Math.random() * (that.questions.length));
+            let allValidQuestions = [];
+            if (that.newLevelFlag) {
+              //This is a new level, so we should return a question that uses the new level's function.
+              that.db.transaction('r', that.db.questions, async () => {
+                console.log('that.level from branch A:');
+                console.log(that.level);
+                that.allValidQuestions = await that.db.questions.where('level').equals(that.level);
+              }).then(() => {
+                //The toArray() method gives us an object rather than an array.
+                //That's a weird choice on the part of the Dexie crew, but we'll roll with it.
+                //Also, we have to do all our tasks in a callback. Fine.
+                const asObject = that.allValidQuestions.toArray(function(questionsFromDb){
+                  const allValidQuestionsAsArray = questionsFromDb;
+                  block = that.createBlockFromQuestionAndFinishStartingItsFall(allValidQuestionsAsArray);
+                  that.finishFallingRandomBlock(block);
+                  that.newLevelFlag = false;
+                });
+              });
+              //Doing this redundantly, since our game seems to have trouble picking up on it when it's in a listener.
+              that.newLevelFlag = false;
             } else {
-                //This is a new level.
-                var questionNumber = that.level * that.numberOfEachFunction - 1;
-                that.newLevelFlag = false;
-            }
-            if ($('#'+that.questions[questionNumber]['function']).is(':checked')){
-                return that.questions[questionNumber];
-            } else {
-                return that.getBlockQuestion();
+              //This is not a new level.
+              that.db.transaction('r', that.db.questions, async () => {
+                console.log('that.level from branch A:');
+                console.log(that.level);
+                that.allValidQuestions = await that.db.questions.where('level').belowOrEqual(that.level);
+              }).then(() => {
+                //Same caveats here as in the duplicated block above.
+                //Maybe I can eventually figure out a way to get rid of this duplicated code.
+                //I'm too lazy for now.
+                const asObject = that.allValidQuestions.toArray(function(questionsFromDb){
+                  const allValidQuestionsAsArray = questionsFromDb;
+                  block = that.createBlockFromQuestionAndFinishStartingItsFall(allValidQuestionsAsArray);
+                  that.finishFallingRandomBlock(block);
+                  that.newLevelFlag = false;
+                });
+              });
             }
         },
 
@@ -302,6 +327,7 @@ $(document).ready(function(){
 
         setupQuestions: function() {
             that.questions.push({
+                'level' : 1,
                 'function' : 'count',
                 'faller' : "$oranges = 15; \n$apples = 'bob';",
                 'instructions' : 'using count()',
@@ -310,6 +336,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/manual/en/function.count.php'
             });
             that.questions.push({
+                'level' : 1,
                 'function' : 'count',
                 'faller' : "$dogs = 250; \n$cats = ['tabby','alley','stray'];",
                 'instructions' : 'using count()',
@@ -318,6 +345,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/manual/en/function.count.php'
             });
             that.questions.push({
+                'level' : 1,
                 'function' : 'count',
                 'faller' : "$fruits = ['apple','pear']; \n$veggies = ['carrot'];",
                 'instructions' : 'using count()',
@@ -326,6 +354,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/manual/en/function.count.php'
             });
             that.questions.push({
+                'level' : 1,
                 'function' : 'count',
                 'faller' : "$greeting = 'Dobrý den'; \n$sendoffs = ['Ahoj', 'Hezký večer'];",
                 'instructions' : 'using count()',
@@ -334,6 +363,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/manual/en/function.count.php'
             });
             that.questions.push({
+                'level' : 2,
                 'function' : 'is_array',
                 'faller' : "$states = ['New York','California']; \n $country = 'USA';",
                 'instructions' : 'using is_array()',
@@ -342,6 +372,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/manual/en/function.is-array.php'
             });
             that.questions.push({
+                'level' : 2,
                 'function' : 'is_array',
                 'faller' : "$counties = 'Ingham and Livingston'; \n$country = ['USA'];",
                 'instructions' : 'using is_array()',
@@ -350,6 +381,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/manual/en/function.is-array.php'
             });
             that.questions.push({
+                'level' : 2,
                 'function' : 'is_array',
                 'faller' : "$states = (object) ['name' => 'California']; \n$countries = ['name' => 'USA'];",
                 'instructions' : 'using is_array()',
@@ -358,6 +390,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/manual/en/function.is-array.php'
             });
             that.questions.push({
+                'level' : 2,
                 'function' : 'is_array',
                 'faller' : "$words = 'A Really Nice Polka'; \n$numbers = [1,2,3,4];",
                 'instructions' : 'using is_array()',
@@ -366,6 +399,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/manual/en/function.is-array.php'
             });
             that.questions.push({
+                'level' : 3,
                 'function' : 'substr',
                 'faller' : "$text = '43 apples is too many apples.'; \n$numbers = [1,2,3];",
                 'instructions' : 'using substr()',
@@ -374,6 +408,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/substr'
             });
             that.questions.push({
+                'level' : 3,
                 'function' : 'substr',
                 'faller' : '$text = "43 apples is too many apples.";',
                 'instructions' : 'using substr()',
@@ -382,6 +417,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/substr'
             });
             that.questions.push({
+                'level' : 3,
                 'function' : 'substr',
                 'faller' : '$text = "43 apples is too many apples.";',
                 'instructions' : 'using substr()',
@@ -390,6 +426,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/substr'
             });
             that.questions.push({
+                'level' : 3,
                 'function' : 'substr',
                 'faller' : '$text = "The Day That Larry Learned To Drive";',
                 'instructions' : 'using substr()',
@@ -398,6 +435,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/substr'
             });
             that.questions.push({
+                'level' : 4,
                 'function' : 'in_array',
                 'faller' : '$beatles = ["John","Paul","George","Ringo"]];',
                 'instructions' : 'using in_array()',
@@ -406,6 +444,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/in_array'
             });
             that.questions.push({
+                'level' : 4,
                 'function' : 'in_array',
                 'faller' : '$cities = ["New York","Paris","Berlin","Tokyo","Lagos"]];',
                 'instructions' : 'by searching for Boston using in_array()',
@@ -414,6 +453,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/in_array'
             });
             that.questions.push({
+                'level' : 4,
                 'function' : 'in_array',
                 'faller' : '$composers = ["Fannie Mendelssohn","Moondog", "Ludwig Van Beethoven"]];',
                 'instructions' : 'using in_array()',
@@ -422,6 +462,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/in_array'
             });
             that.questions.push({
+                'level' : 4,
                 'function' : 'in_array',
                 'faller' : '$objects = ["Paper","Rock","Scissors"]];',
                 'instructions' : 'by searching for glue using in_array()',
@@ -430,6 +471,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/in_array'
             });
             that.questions.push({
+                'level' : 5,
                 'function' : 'explode',
                 'faller' : '$dances = "polka,foxtrot,chicken";',
                 'instructions' : 'using count() and explode()',
@@ -438,6 +480,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/explode'
             });
             that.questions.push({
+                'level' : 5,
                 'function' : 'explode',
                 'faller' : '$beers = "wheat,stout,helles,dunkel";',
                 'instructions' : 'using explode()',
@@ -446,6 +489,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/explode'
             });
             that.questions.push({
+                'level' : 5,
                 'function' : 'explode',
                 'faller' : '$beers = "wheat,stout,dunkel,helles";',
                 'instructions' : 'using explode() and count()',
@@ -454,6 +498,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/explode'
             });
             that.questions.push({
+                'level' : 5,
                 'function' : 'explode',
                 'faller' : '$towns = "Vsetín Kalamazoo Xenia";',
                 'instructions' : 'using explode()',
@@ -462,6 +507,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/explode'
             });
             that.questions.push({
+                'level' : 6,
                 'function' : 'str_replace',
                 'faller' : '$text = "My Laptop Is Full Of Ham";',
                 'instructions' : 'using str_replace()',
@@ -470,6 +516,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/str_replace'
             });
             that.questions.push({
+                'level' : 6,
                 'function' : 'str_replace',
                 'faller' : '$text = "Mustard and Toast";',
                 'instructions' : 'using str_replace()',
@@ -478,6 +525,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/str_replace'
             });
             that.questions.push({
+                'level' : 6,
                 'function' : 'str_replace',
                 'faller' : '$text = "And That\'s What I Learned In School Today";',
                 'instructions' : 'using str_replace()',
@@ -486,6 +534,7 @@ $(document).ready(function(){
                 'page' : 'https://www.php.net/str_replace'
             });
             that.questions.push({
+                'level' : 6,
                 'function' : 'str_replace',
                 'faller' : '$text = "Well That Is Just Not Very Nice";',
                 'instructions' : 'using str_replace()',
@@ -499,7 +548,7 @@ $(document).ready(function(){
             var dbName = 'codePlunge';
             that.db = new Dexie(dbName);
             that.db.version(1).stores({
-              questions: 'id++,function,faller,instructions,castTo,logic,page'
+              questions: 'id++,level,functionName,faller,instructions,castTo,logic,page'
             });
             that.db.open().catch(function (e) {
               console.error("Open failed.");
@@ -508,6 +557,7 @@ $(document).ready(function(){
             that.db.transaction('rw', that.db['questions'], function () {
             $(that.questions).each(function(i,v){
               that.db.questions.add({
+                level: v['level'],
                 functionName: v['function'],
                 faller: v['faller'],
                 instructions: v['instructions'],
@@ -517,7 +567,13 @@ $(document).ready(function(){
                 language: 'php' //This can stay here for now, but it should eventually move to our language JSON files.
               });
             });
-            }).catch (function (e) {
+            })
+            .then(function(){
+              that.board = that.setupBoard();
+              that.getBlockQuestionAndCreateRandomBlock();
+              that.newLevelFlag = false;
+            })
+            .catch (function (e) {
               console.error('transaction failed.');
               console.error(e);
             });
