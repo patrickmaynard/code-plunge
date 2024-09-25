@@ -1,0 +1,43 @@
+* {padding:0px; margin:0px; text-align:center;}
+div {border:1px solid gray; margin:auto;}
+#board {width: 800px; height: 65vh;}
+#instructions {width: 800px; height: 15vh;}
+#code {width:800px; height: 8vh;}
+div.falling-block {color:black; background:gray; width:200px; z-index:100;}
+div#score {width: 800px; height:4vh;}
+div#options {
+  z-index: 1001;
+  background: white;
+  min-height:150px;
+  width:650px;
+  position:relative;
+  top:40px;
+  padding:20px;
+}
+div#options-container {
+  height:0px;
+  border:0px none;
+  overflow: visible;
+  z-index:1000;
+}
+div.hidden-options {
+  display:none;
+}
+.speed-label {
+  position:relative;
+  top:-5px;
+}
+div#available-functions {
+  height:100px;
+  width: 220px;
+  overflow-x:scroll;
+  margin-top:20px;
+  #margin-bottom:20px;
+  border: 1px dashed #cccccc;
+}
+div#available-functions span {
+  white-space: nowrap;
+}
+div#available-functions label {
+  margin-right: 15px;
+}

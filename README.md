@@ -21,7 +21,11 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 * x Do import of questions into dexie, as part of prep for a move to a DB
 * x Move question retrieval to dexie (see TIWIS line), as part of a preparation
   for an eventual move to using a DB
-* Clean up CSS a bit
+* x Clean up CSS a bit
+* Make sure that there are no unused functions left in the js code, then remove
+  all comments related to the introduction of Dexie. This will involve testing
+  the game manually for several levels, with lots of variations of behavior.
+  Budget lots of time for this
 * Get help on seeing if there's a better transpiler to use, since the current one seems to use an old version of PHP. One possible option: https://github.com/seanmorris/php-wasm
 * Add a collapsible area that shows the previous answer. Can be shown/hidden via
   a checkbox in the pause screen, with it hidden by default to save screen real
