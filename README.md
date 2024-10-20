@@ -22,7 +22,7 @@ Apologies for the terrible JavaScript and HTML. I am not a frontend developer th
 * x Move question retrieval to dexie (see TIWIS line), as part of a preparation
   for an eventual move to using a DB
 * x Clean up CSS a bit
-* Make sure that there are no unused functions left in the js code, then remove
+* x Make sure that there are no unused functions left in the js code, then remove
   all comments related to the introduction of Dexie. This will involve testing
   the game manually for several levels, with lots of variations of behavior.
   Budget lots of time for this
