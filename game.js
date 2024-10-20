@@ -7,6 +7,7 @@ $(document).ready(function(){
     let game = {
 
         init: function () {
+            console.log('init.');
             that = this;
             that.delay = 100; //How many milliseconds between pixel moves
             that.questions = [];
@@ -28,6 +29,7 @@ $(document).ready(function(){
         },
 
         setupBoard: function() {
+            console.log('setupBoard.');
             let board = $($('#board'));
             board.html('');
             board.off();
@@ -40,14 +42,14 @@ $(document).ready(function(){
             return board;
         },
 
-        togglePause: function(board) {
+        togglePause: function (board) {
+            console.log('togglePause.');
             $('#options').toggleClass('hidden-options');
             board.toggleClass('paused');
         },
 
         finishFallingRandomBlock: function(block) {
-            console.log('Getting ready to finish falling. The block:');
-            console.log(block);
+            console.log('finishFallingBlock.');
             that.setInitialBlockPosition(block);
             that.setStopPoint(block);
             block.intervalId = window.setInterval(that.considerMovingBlockDownOnePixel, that.delay, block);
@@ -78,6 +80,7 @@ $(document).ready(function(){
         },
 
         chooseCastTypeAndCastExpectedValueForDisplay: function(expected, block) {
+            console.log('chooseCastrTypeAndCastExpectedValueForDisplay.');
             const castType = block.question.castTo;
             var stringToShow = "";
 
@@ -108,8 +111,8 @@ $(document).ready(function(){
         },
 
         setInitialBlockPosition: function(block) {
+            console.log('setInitialBlockPosition.');
             const boardWidth = $($('#board')[0]).width();
-            console.log(block);
             block.offset(
                 {
                     top: 0,
@@ -119,6 +122,7 @@ $(document).ready(function(){
         },
 
         manageBlockSpeed: function(block) {
+            console.log('manageBlockSpeed.');
             $('#speed')[0].value = 100 - that.delay;
             $(document).on('input', '#speed', function() {
                 //alert('Changed');
@@ -129,6 +133,7 @@ $(document).ready(function(){
         },
 
         considerMovingBlockDownOnePixel: function(block) {
+            console.log('considerMovingBlockDownOnePixel.');
             let board = $($('#board')[0]);
             if (board.hasClass('paused')) {
                 return;
@@ -164,12 +169,14 @@ $(document).ready(function(){
         },
 
         clearListenerAndFallNextBlock: function() {
+            console.log('clearListenerAndFallNextBlock.');
             $('#code').off();
             $('#code')[0].value = '';
             that.getBlockQuestionAndCreateRandomBlock();
         },
 
         setStopPoint: function(block) {
+            console.log('setStopPoint');
             const previousStopPoint = $($('#board')[0]).height();
             block.stopPoint = previousStopPoint;
             blocks = $('.falling-block');
@@ -192,31 +199,20 @@ $(document).ready(function(){
             });
         },
 
-        //This is new as part of my dexie refactoring.
-        //TODO: Remove this comment when the refactoring is done.
         createBlockFromQuestionAndFinishStartingItsFall: function(allValidQuestionsAsArray) {
+            console.log('createBlockFromQuestionAndFinishStartingItsFall');
             var questionNumber = Math.floor(Math.random() * (allValidQuestionsAsArray.length));
             question = allValidQuestionsAsArray[questionNumber];
-            console.log('Starting the createBlockFromQuestionAndFinishStartingItsFall logic ...');
             const id = Math.round(Math.random() * 100000000);
             $('#board')[0].innerHTML += '<div class="falling-block" id="block_'+id+'"> ... </div>';
             const block = $($('#block_'+id)[0]);
-            console.log(block);
             block.question = question;
-            console.log('The question:');
-            console.log(question);
             block.html(block.question.faller);
-            console.log('Almost finished with createBlockFromQuestionAndFinishStartingItsFall logic ...');
             that.finishFallingRandomBlock(block);
-            console.log('Finished with createBlockFromQuestionAndFinishStartingItsFall logic.');
         },
 
         getBlockQuestionAndCreateRandomBlock: function() {
-           //New behavior (partially built -- the availableFunctionNames array is now being reliably populated.
-           //The next step is to do a dexie query for all applicable questions and select a random question.
-           //After that, we would want to return that random question.
-           //Finally, we want to TEST this new behavior extremely thoroughly, using both manual and automated tests.
-
+            console.log('getBlockQuestionAndCreateRandomBlock');
             availableFunctionNames = [];
             $('#available-functions').children('span').each(function(i,v){
               let checkbox = $(v).children('input')[0];
@@ -228,8 +224,6 @@ $(document).ready(function(){
             if (that.newLevelFlag) {
               //This is a new level, so we should return a question that uses the new level's function.
               that.db.transaction('r', that.db.questions, async () => {
-                console.log('that.level from branch A:');
-                console.log(that.level);
                 that.allValidQuestions = await that.db.questions.where('level').equals(that.level);
               }).then(() => {
                 //The toArray() method gives us an object rather than an array.
@@ -238,6 +232,13 @@ $(document).ready(function(){
                 const asObject = that.allValidQuestions.toArray(function(questionsFromDb){
                   const allValidQuestionsAsArray = questionsFromDb;
                   block = that.createBlockFromQuestionAndFinishStartingItsFall(allValidQuestionsAsArray);
+                  console.error('We are doing evil.');
+                  console.log(allValidQuestionsAsArray);
+                  lastFunctionName = allValidQuestionsAsArray.at(-1).functionName;
+                  console.log(lastFunctionName);
+                  if ($('#auto-add-functions').is(':checked')) {
+                      $('#' + lastFunctionName)[0].checked = 'checked';
+                  }
                   that.finishFallingRandomBlock(block);
                   that.newLevelFlag = false;
                 });
@@ -247,8 +248,6 @@ $(document).ready(function(){
             } else {
               //This is not a new level.
               that.db.transaction('r', that.db.questions, async () => {
-                console.log('that.level from branch A:');
-                console.log(that.level);
                 that.allValidQuestions = await that.db.questions.where('level').belowOrEqual(that.level);
               }).then(() => {
                 //Same caveats here as in the duplicated block above.
@@ -267,6 +266,7 @@ $(document).ready(function(){
         //Note that this method automatically "prints" the last expression.
         //That "print" output is then returned as a string.
         executePhpAndGetPrintedResult: function(partialPhpToExecute) {
+            console.log('executePhpAndGetPrintedResult.');
             const phpEngine = uniter.createEngine('PHP');
             var fullPhpToExecute  = "<?php\n";
             var returnedData  = "";
@@ -288,18 +288,16 @@ $(document).ready(function(){
                 returnedData = data;
             });
             phpEngine.execute(fullPhpToExecute, 'my_script.php');
-            console.log(fullPhpToExecute);
             return returnedData;
         },
 
         trySolution: function(block) {
+            console.log('trySolution.');
             const expected = that.executePhpAndGetPrintedResult(
                 block.question.faller + "\n" + block.question.logic
             );
             const phpToExecute = block.question.faller + "\n" + $('#code')[0].value;
             const result = that.executePhpAndGetPrintedResult(phpToExecute);
-            console.log('Expected: ' + expected);
-            console.log('Result: ' + result);
             if (expected === result) {
                 that.scoreBox.html(parseInt(that.scoreBox.html()) + that.pointsPerCorrectAnswer);
                 block.remove();
@@ -311,21 +309,17 @@ $(document).ready(function(){
         },
 
         levelUp: function() {
+            console.log('levelUp.');
             that.level ++;
             that.newLevelFlag = true;
-            console.log('We have just leveled up. New level:');
-            console.log(that.level);
             if (that.level > that.totalLevels) {
                 alert('Congratulations! You have beaten the game! Restarting ...');
                 that.init();
             }
-            const functionName = that.questions[that.numberOfEachFunction * (that.level - 1)]['function'];
-            if ($('#auto-add-functions').is(':checked')) {
-                $('#' + functionName)[0].checked = 'checked';
-            }
         },
 
         setupQuestions: function() {
+            console.log('setupQuestions.');
             that.questions.push({
                 'level' : 1,
                 'function' : 'count',
@@ -545,6 +539,7 @@ $(document).ready(function(){
         },
 
         putQuestionsIntoDatabase: function() {
+            console.log('putQuestionsIntoDatabase.');
             var dbName = 'codePlunge';
             that.db = new Dexie(dbName);
             that.db.version(1).stores({
@@ -569,11 +564,13 @@ $(document).ready(function(){
             });
             })
             .then(function(){
+              delete that.questions;
               that.board = that.setupBoard();
               that.getBlockQuestionAndCreateRandomBlock();
               that.newLevelFlag = false;
             })
             .catch (function (e) {
+              console.log('transaction failed');
               console.error('transaction failed.');
               console.error(e);
             });
