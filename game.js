@@ -56,7 +56,7 @@ $(document).ready(function(){
             $('#instructions')[0].innerHTML =
                 'Get ' +
                 that.chooseCastTypeAndCastExpectedValueForDisplay(
-                    that.executePhpAndGetPrintedResult(
+                    phpExecutor.executePhpAndGetPrintedResult(
                         block.question.faller + "\n" + block.question.logic
                     ),
                     block
@@ -293,11 +293,11 @@ $(document).ready(function(){
 
         trySolution: function(block) {
             console.log('trySolution.');
-            const expected = that.executePhpAndGetPrintedResult(
+            const expected = phpExecutor.executePhpAndGetPrintedResult(
                 block.question.faller + "\n" + block.question.logic
             );
             const phpToExecute = block.question.faller + "\n" + $('#code')[0].value;
-            const result = that.executePhpAndGetPrintedResult(phpToExecute);
+            const result = phpExecutor.executePhpAndGetPrintedResult(phpToExecute);
             if (expected === result) {
                 that.scoreBox.html(parseInt(that.scoreBox.html()) + that.pointsPerCorrectAnswer);
                 block.remove();

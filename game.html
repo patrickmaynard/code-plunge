@@ -4,7 +4,15 @@
     <title>Code Plunge</title>
     <link rel="stylesheet" href="http://berlin.patrickmaynard.com/css/normalize.css" />
     <link rel="stylesheet" href="game.css" />
+
+    <script>var exports = {};</script>
+    <script src="languageProviderPhpUniter.js"></script>
     <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.js"></script>
+
+    <!-- todo: Get this to actually work, along with our local languageProviderPhpWasm, which is in progress -->
+    <script async type = "text/javascript" src = "https://www.unpkg.com/php-wasm/php-tags.unpkg.mjs"></script>
+
+    <!-- this will soon go away in favor of the wasm option above. -->
     <script src="https://unpkg.com/uniter@2.17.0/dist/uniter.js"></script>
     <script src="https://unpkg.com/dexie@4.0.7/dist/dexie.js"></script>
     <script src="game.js"></script>
