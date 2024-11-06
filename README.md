@@ -11,29 +11,14 @@ The game uses https://github.com/uniter for transpiling PHP into JavaScript.
 Apologies for the terrible JavaScript and HTML. I am not a frontend developer these days, so I'm hoping to eventually get some help refactoring.
 
 ## TODO items:
-
-* x Make scrollable the area of checkboxes for functions in pause modal
-* x Lock the gameplay area to a specific pixel size so scores are competitive
-  (Actually, no. To reliably have competitive, server-verified scores, we
-  would need to allow users to run arbitrary PHP code on my server, which is
-  not something I am prepared to do at this time. So we'll just store personal
-  scores in a cookie instead.)
-* x Do import of questions into dexie, as part of prep for a move to a DB
-* x Move question retrieval to dexie (see TIWIS line), as part of a preparation
-  for an eventual move to using a DB
-* x Clean up CSS a bit
-* x Make sure that there are no unused functions left in the js code, then remove
-  all comments related to the introduction of Dexie. This will involve testing
-  the game manually for several levels, with lots of variations of behavior.
-  Budget lots of time for this
-* Get help on seeing if there's a better transpiler to use, since the current one seems to use an old version of PHP. One possible option: https://github.com/seanmorris/php-wasm
+ 
+* Switch to using NPM and get a better transpiler working. One possible option: https://github.com/seanmorris/php-wasm
 * Add a collapsible area that shows the previous answer. Can be shown/hidden via
   a checkbox in the pause screen, with it hidden by default to save screen real
   estate
 * Add an MIT license, along with a mention on the home screen of the idea that
   any fees eventually paid for the game are not for the software itself, which
   is free, but for things like early access to new questions
-* Remove any old JS functions that are no longer used
 * Add 4 more functions from https://www.exakat.io/en/top-100-php-functions/ for the top 10
 * Fix the bug in which people can just type a literal or boolean to "answer" the question
 * Add a minimal screen resolution check in the css, with screens below a certain
