@@ -1,15 +1,17 @@
 //This is currently just a generic object.
 //Later, I can get fancy with an "export" keyword, a class definition, etc.,.
 //That comes once I get this project onto an actual server instead of having it served entirely via GitHub.
+import Uniter from 'uniter'
+import $ from 'jquery';
 
-var phpExecutor = {
+export const phpExecutor = {
     //Note that this method automatically "prints" the last expression.
     //That "print" output is then returned as a string.
-    executePhpAndGetPrintedResult: function(partialPhpToExecute) {
+    executePhpAndGetPrintedResult: function (partialPhpToExecute) {
         console.log('executePhpAndGetPrintedResult.');
-        const phpEngine = uniter.createEngine('PHP');
-        var fullPhpToExecute  = "<?php\n";
-        var returnedData  = "";
+        const phpEngine = Uniter.createEngine('PHP');
+        var fullPhpToExecute = "<?php\n";
+        var returnedData = "";
         var fullPhpToExecuteParts = [];
         var lastElement = {};
         var lastCharacter = "";
