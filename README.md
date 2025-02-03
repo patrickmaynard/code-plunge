@@ -10,6 +10,40 @@ The game uses https://github.com/uniter for transpiling PHP into JavaScript.
 
 Apologies for the terrible JavaScript and HTML. I am not a frontend developer these days, so I'm hoping to eventually get some help refactoring.
 
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (latest LTS recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+
+### Installation
+
+Clone the repository and install dependencies:
+
+### Start the development server:
+
+```sh
+git clone https://github.com/patrickmaynard/code-plunge.git
+cd code-plunge
+npm install
+```
+
+
+### Running the Project
+Start the development server:
+```sh
+npm run dev
+```
+Build the project for production:
+```
+npm run build
+```
+
+
 ## TODO items:
  
 * Switch to using NPM and get a better transpiler working. One possible option: https://github.com/seanmorris/php-wasm
