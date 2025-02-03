@@ -24,8 +24,6 @@ Ensure you have the following installed:
 
 Clone the repository and install dependencies:
 
-### Start the development server:
-
 ```sh
 git clone https://github.com/patrickmaynard/code-plunge.git
 cd code-plunge
