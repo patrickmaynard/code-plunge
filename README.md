@@ -1,5 +1,8 @@
 # Code plunge
 
+## 2026 status update: After an attempt to be fancy and move away from using unpkg for JS libraries, this game is now broken.
+## Feel free to fork it and repair if it you're feeling bored. I will probably leave it alone from now on. 
+
 This is a PARTIALLY COMPLETE game for practicing the use of the most common PHP functions. (More languages coming soon ... ish.)
 
 It is based loosely on Tetris. To play the game, visit http://patrickmaynard.github.io/code-plunge
